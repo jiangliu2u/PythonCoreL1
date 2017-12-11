@@ -23,7 +23,7 @@ except:
 
 def get_xsrf():  # 每个登录页面都有一个xsfr码，登录时包含在header里面
     content = requests.get("https://www.zhihu.com", headers={
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
         'Referer': 'http://www.zhihu.com/'}).text
     # print(content)
     pattern = re.compile('.*?<input type="hidden" name="_xsrf" value="(.*?)"/>.*?', re.S)
