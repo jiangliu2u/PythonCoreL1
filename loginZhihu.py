@@ -1,17 +1,8 @@
 import requests
-
-try:
-    import cookielib
-except:
-    import http.cookiejar as cookielib
+import http.cookiejar as cookielib
 import re
 import time
-import os.path
-
-try:
-    from PIL import Image
-except:
-    pass
+from PIL import Image
 
 # 构造 Request headers
 agent = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36'
@@ -30,7 +21,7 @@ except:
     print("Cookie 未能加载")
 
 
-def get_xsrf():
+def get_xsrf():  # 每个登录页面都有一个xsfr码，登录时包含在header里面
     content = requests.get("https://www.zhihu.com", headers={
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36',
         'Referer': 'http://www.zhihu.com/'}).text
@@ -49,15 +40,12 @@ def get_captcha():
     with open('captcha.jpg', 'wb') as f:
         f.write(r.content)
         f.close()
+
     # 用pillow 的 Image 显示验证码
-    # 如果没有安装 pillow 到源代码所在的目录去找到验证码然后手动输入
-    try:
-        im = Image.open('captcha.jpg')
-        im.show()
-        im.close()
-    except:
-        print(u'请到 %s 目录找到captcha.jpg 手动输入' % os.path.abspath('captcha.jpg'))
-    captcha = input("please input the captcha\n>")
+    im = Image.open('captcha.jpg')
+    im.show()
+    im.close()
+    captcha = input("请输入验证码\n>")
     return captcha
 
 
@@ -88,7 +76,7 @@ def login(secret, account):
         if "@" in account:
             print("邮箱登录 \n")
         else:
-            print("你的账号输入有问题，请重新登录")
+            print("你的账号输入错误")
             return 0
         post_url = 'https://www.zhihu.com/login/email'
         postdata = {
@@ -121,8 +109,8 @@ def main():
     if isLogin():
         print('已经登录')
     else:
-        account = input()
-        secret = input()
+        account = input('请输入用户名：')
+        secret = input('请输入密码：')
         login(secret, account)
 
 
