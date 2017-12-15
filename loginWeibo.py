@@ -44,11 +44,13 @@ def login(username, password):
     login_page = session.post("https://passport.weibo.cn/sso/login", data=postdata, headers=headers)
     print(login_page.text)
     session.cookies.save()
-    folow = session.get("https://m.weibo.cn/u/2279881761", headers={
-    "Host": "m.weibo.cn",
+    folow = session.get("https://m.weibo.cn/feed/friends?", headers={
+    'Accept':'application/json, text/plain, */*',
+    'Referer':'https://m.weibo.cn/beta',
+    'X-Requested-With':'XMLHttpRequest',
     'User-Agent': agent
-})
-    print(folow.text)
+    })
+    print(folow.json())
 
 
 try:
@@ -61,7 +63,7 @@ def main():
     if isLogin():
         print('已经登录')
     else:
-        account = '**@163.com'
+        account = '**'
         secret = '**'
         login(account, secret)
 
