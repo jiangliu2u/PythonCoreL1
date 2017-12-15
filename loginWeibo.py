@@ -3,6 +3,8 @@ import http.cookiejar as cookielib
 import re
 import time
 from PIL import Image
+import json
+import sys
 
 # 构造 Request headers
 # agent = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36'
@@ -13,6 +15,7 @@ headers = {
     'User-Agent': agent
 }
 
+non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)#解决Non-BMP character问题
 # 使用登录cookie信息
 session = requests.session()
 session.cookies = cookielib.LWPCookieJar(filename='cookies')
@@ -44,14 +47,16 @@ def login(username, password):
     login_page = session.post("https://passport.weibo.cn/sso/login", data=postdata, headers=headers)
     print(login_page.text)
     session.cookies.save()
-    folow = session.get("https://m.weibo.cn/feed/friends?", headers={
+    follow = session.get("https://m.weibo.cn/feed/friends?", headers={
     'Accept':'application/json, text/plain, */*',
     'Referer':'https://m.weibo.cn/beta',
     'X-Requested-With':'XMLHttpRequest',
     'User-Agent': agent
     })
-    print(folow.json())
-
+    
+    data = follow.json()['data']['statuses']
+    for i in data:
+        print(i['text'].translate(non_bmp_map))
 
 try:
     input = raw_input
