@@ -69,7 +69,7 @@ def login(username, password):
         'r': 'https://m.weibo.cn/beta',
         'pagerefer': 'https://passport.weibo.cn/ignin/welcome?entry=mweibo&r=https%3A%2F%2Fm.weibo.cn%2Fbeta'
     }
-    login_page = session.post("https://passport.weibo.cn/sso/login", data=postdata, headers=headers)
+    session.post("https://passport.weibo.cn/sso/login", data=postdata, headers=headers)
     session.cookies.save()
 
 
