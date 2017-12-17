@@ -72,13 +72,6 @@ def login(username, password):
     session.post("https://passport.weibo.cn/sso/login", data=postdata, headers=headers)
     session.cookies.save()
 
-
-try:
-    input = raw_input
-except:
-    pass
-
-
 def main():
     if isLogin():
         print('已经登录')
