@@ -43,8 +43,9 @@ def getWeibo():
     head = {
         'Accept': 'application/json, text/plain, */*',
         'Referer': 'https://m.weibo.cn/beta',
-        'X-Requested-With': 'XMLHttpRequest',
-        'User-Agent': agent
+        'Host':'m.weibo.cn',
+        'User-Agent': agent,
+        'upgrade-insecure-requests':1
     }
     url = "https://m.weibo.cn/feed/friends?&max_id="
     follow = session.get(url, headers=head)
@@ -52,8 +53,9 @@ def getWeibo():
         data = follow.json()['data']['statuses']
         next_api = data[19]['mid']  # 第20条微博的mid为下拉页面加载更多微博的参数 请求链接为'https://m.weibo.cn/feed/friends?&max_id='+next_api
         for i in data:
+            m= i['raw_text']
             b = i['text'].translate(non_bmp_map)
-            c = re.sub(r'<a .*?>', '', b)
+            #c = re.sub(r'<a .*?>', '', b)
             c = re.sub(r'<span .*?</span>', '', c)
             c = re.sub(r'</a>', '', c)
             c = re.sub(r'<br/>', '', c)
@@ -80,11 +82,11 @@ def main():
         secret = '***'
         login(account, secret)
     getWeibo()
-    connection = pymongo.MongoClient('127.0.0.1', 27017)#把爬到的微博内容写入mongodb
-    weibo = connection.weibo
-    weibo = weibo.weibo
-    for i in weibo_3pages:
-        weibo.insert({'weibo_content': i})
+    #connection = pymongo.MongoClient('127.0.0.1', 27017)#把爬到的微博内容写入mongodb
+    #weibo = connection.weibo
+    #weibo = weibo.weibo
+    #for i in weibo_3pages:
+        #weibo.insert({'weibo_content': i})
 
 
 if __name__ == '__main__':
