@@ -78,8 +78,8 @@ def main():
     if isLogin():
         print('已经登录')
     else:
-        account = '8'
-        secret = '8'
+        account = input('请输入用户名:')
+        secret = input('请输入密码:')
         login(account, secret)
     getWeibo()
 
