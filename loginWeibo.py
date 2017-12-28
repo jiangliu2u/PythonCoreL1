@@ -46,7 +46,7 @@ def getWeibo():
     weibo = weibo.weibo
     url = "https://m.weibo.cn/feed/friends?&max_id="
     follow = session.get(url, headers=get_header)
-    for i in range(6):
+    for i in range(5):
         data = follow.json()['data']['statuses']
         next_api = data[19]['mid']  # 第20条微博的mid为下拉页面加载更多微博的参数 请求链接为'https://m.weibo.cn/feed/friends?&max_id='+next_api
         for i in data:
