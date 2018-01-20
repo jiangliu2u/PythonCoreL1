@@ -22,9 +22,9 @@ get_header = {
 non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)  # 解决Non-BMP character问题
 # 使用登录cookie信息
 session = requests.session()
-session.cookies = cookielib.LWPCookieJar(filename='cookies')
+session.cookies = cookielib.LWPCookieJar(filename = 'cookies')
 try:
-    session.cookies.load(ignore_discard=True)
+    session.cookies.load(ignore_discard = True)
     print('使用Cookie登录')
 except:
     print("Cookie未能加载")
@@ -33,7 +33,7 @@ except:
 def isLogin():
     # 通过查看用户个人信息来判断是否已经登录
     url = "https://m.weibo.cn/profile/2279881761"
-    login_code = session.get(url, headers=get_header, allow_redirects=False).status_code
+    login_code = session.get(url, headers = get_header, allow_redirects = False).status_code
     if login_code == 200:
         return True
     else:
@@ -45,7 +45,7 @@ def getWeibo():
     weibo = connection.weibo
     weibo = weibo.weibo
     url = "https://m.weibo.cn/feed/friends?&max_id="
-    follow = session.get(url, headers=get_header)
+    follow = session.get(url, headers = get_header)
     for i in range(5):
         data = follow.json()['data']['statuses']
         next_api = data[19]['mid']  # 第20条微博的mid为下拉页面加载更多微博的参数 请求链接为'https://m.weibo.cn/feed/friends?&max_id='+next_api
@@ -58,7 +58,7 @@ def getWeibo():
             username = i['user']['screen_name']  # 用户名
             pub_date = i['created_at']  # 发布日期
             weibo.insert({'weibo_content': weibo_content, 'username': username, 'pub_date': pub_date})
-        follow = session.get(url + next_api, headers=get_header)
+        follow = session.get(url + next_api, headers = get_header)
     connection.close()
 
 
@@ -70,7 +70,7 @@ def login(username, password):
         'r': 'https://m.weibo.cn/beta',
         'pagerefer': 'https://passport.weibo.cn/ignin/welcome?entry=mweibo&r=https%3A%2F%2Fm.weibo.cn%2Fbeta'
     }
-    session.post("https://passport.weibo.cn/sso/login", data=postdata, headers=loging_headers)
+    session.post("https://passport.weibo.cn/sso/login", data = postdata, headers = loging_headers)
     session.cookies.save()
 
 
