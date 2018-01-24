@@ -27,7 +27,7 @@ class Lucy(object):
         self.age = 32
 
     @method_friendly_decorator
-    def sayYourAge(self, lie):
+    def say_your_age(self, lie):
         print("I am {}, what did you think?".format(self.age+lie))
 
 
