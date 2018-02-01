@@ -12,6 +12,6 @@ class A(object):
 
 A.foo_stc(1)
 a =A()
-a.foo(2)
+a.foo(5)
 a.foo_cls(3)
 a.foo_stc(4)
