@@ -16,7 +16,7 @@ print_full_name('Liu', 'Jiang')
 
 def method_friendly_decorator(method_to_decorate):
     def wrapper(self, lie):
-        lie = lie - 3  # 女性福音 :-)
+        lie = lie - 3  # 年龄-3
         return method_to_decorate(self, lie)
 
     return wrapper
