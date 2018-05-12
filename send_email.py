@@ -23,7 +23,7 @@ def send_mail(to_list,sub,content):
         print('发送失败')
         return False  
 for i in range(1):                             #发送1封，上面的列表是几个人，这个就填几  
-    if send_mail(mailto_list,"电话","电话是XXX"):  #邮件主题和邮件内容，这是最好写点中文，如果随便写，可能会被网易当做垃圾邮件退信  
+    if send_mail(mailto_list,"电话","电话是XXX"):  #邮件主题和邮件内容  
         print("发送成功")
     else:  
         print("发送失败!")
