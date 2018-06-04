@@ -8,7 +8,8 @@ import pymongo
 agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
 loging_headers = {
     "Host": "passport.weibo.cn",
-    "Referer": "https://passport.weibo.cn/signin/login?entry=mweibo&res=wel&wm=3349&r=http%3A%2F%2Fm.weibo.cn%2F",
+    "Origin":"https://passport.weibo.cn",
+    "Referer": "https://passport.weibo.cn/signin/login",
     'User-Agent': agent
 }
 
@@ -16,6 +17,7 @@ get_header = {
     'Accept': 'application/json, text/plain, */*',
     'Referer': 'https://m.weibo.cn/beta',
     'Host': 'm.weibo.cn',
+    'MWeibo-Pwa': '1',
     'User-Agent': agent
 }
 
@@ -32,7 +34,7 @@ except:
 
 def isLogin():
     # 通过查看用户个人信息来判断是否已经登录
-    url = "https://m.weibo.cn/profile/2279881761"
+    url="https://m.weibo.cn/users/2279881761?set=1"
     login_code = session.get(url, headers = get_header, allow_redirects = False).status_code
     if login_code == 200:
         return True
@@ -44,11 +46,13 @@ def getWeibo():
     connection = pymongo.MongoClient('127.0.0.1', 27017)  # 把爬到的微博内容写入mongodb
     weibo = connection.weibo
     weibo = weibo.weibo
-    url = "https://m.weibo.cn/feed/friends?&max_id="
-    follow = session.get(url, headers = get_header)
+    url = "https://m.weibo.cn/feed/friends?max_id="
+    follow = session.get(url, headers = get_header).json()
+    print(follow)
     for i in range(5):
-        data = follow.json()['data']['statuses']
-        next_api = data[19]['mid']  # 第20条微博的mid为下拉页面加载更多微博的参数 请求链接为'https://m.weibo.cn/feed/friends?&max_id='+next_api
+        print(i)
+        data = follow['data']['statuses']
+        next_api = data[19]['mid']  # 第20条微博的mid为下拉页面加载更多微博的参数 请求链接为'https://m.weibo.cn/feed/friends?max_id='+next_api
         for i in data:
             b = i['text'].translate(non_bmp_map)
             c = re.sub(r'<a .*?>', '', b)
@@ -57,7 +61,8 @@ def getWeibo():
             weibo_content = re.sub(r'<br/>', '', c)  # 微博内容
             username = i['user']['screen_name']  # 用户名
             pub_date = i['created_at']  # 发布日期
-            weibo.insert({'weibo_content': weibo_content, 'username': username, 'pub_date': pub_date})
+            print(weibo_content,username,pub_date,sep=',   ')
+            #weibo.insert({'weibo_content': weibo_content, 'username': username, 'pub_date': pub_date})
         follow = session.get(url + next_api, headers = get_header)
     connection.close()
 
