@@ -42,7 +42,7 @@ class LoginWeibo(object):
             print("使用Cookie登录")
         except:
             print("Cookie未能加载,准备使用用户名和密码登录")
-            self.login('yourusername','yourpassword ')#填写自己的用户名密码，也可以在login函数中更改为input手动输入
+            self._login('yourusername','yourpassword ')#填写自己的用户名密码，也可以在login函数中更改为input手动输入
 
     def _is_login(self):
         # 通过查看用户个人信息来判断是否已经登录
